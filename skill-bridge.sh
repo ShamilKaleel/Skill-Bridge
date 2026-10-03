@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 # Skill Bridge 1.0 - copy selected local skills between Claude Code and Codex.
-# Ubuntu / Bash 4.4+. No sudo, Python, Node, or network access needed.
+# Linux / Bash 4.4+. No sudo, Python, Node, or network access needed.
 # Install: bash skill-bridge.sh --install
 # Run: skillsync
 # Docs checked 2026-10-02:
 # https://learn.chatgpt.com/docs/build-skills
 # https://code.claude.com/docs/en/skills
 
-set -Eeuo pipefail
-shopt -s nullglob
-
-if (( BASH_VERSINFO[0] < 4 )); then
+# Keep this check POSIX so `sh skill-bridge.sh` reaches the message.
+if [ -z "${BASH_VERSION:-}" ] || [ "${BASH_VERSINFO:-0}" -lt 4 ]; then
     printf 'This script needs Bash 4 or later. Run it with bash, not sh.\n' >&2
     exit 1
 fi
+
+set -Eeuo pipefail
+shopt -s nullglob
 
 SB_CLAUDE_ROOT="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills"
 SB_CODEX_ROOT="$HOME/.agents/skills"
